@@ -157,3 +157,33 @@ prompts/
 - 客户自助续费入口（App/小程序）
 - 与第三方保司系统对接
 - AI 声音克隆（使用通用 TTS）
+
+---
+
+## 附录：功能状态追踪（features.json）
+
+> 进阶项目建议用 JSON 而非 Markdown 追踪功能完成状态。原因：Markdown checklist 格式宽松，AI 容易自行解读或提前打勾；JSON 格式严格，AI 只能修改 `passes` 字段，不能删除或改写功能描述。
+
+```json
+[
+  { "id": "F01", "feature": "调度 Agent：筛选即将到期保单", "phase": 1, "passes": false },
+  { "id": "F02", "feature": "调度 Agent：排除黑名单客户", "phase": 1, "passes": false },
+  { "id": "F03", "feature": "调度 Agent：时间窗口限制（工作日 10-12/14-17）", "phase": 1, "passes": false },
+  { "id": "F04", "feature": "调度 Agent：每月触达上限 3 次", "phase": 1, "passes": false },
+  { "id": "F05", "feature": "开场 Agent：5 秒内声明 AI 身份", "phase": 1, "passes": false },
+  { "id": "F06", "feature": "开场 Agent：拒绝即停并加黑名单", "phase": 1, "passes": false },
+  { "id": "F07", "feature": "开场 Agent：意向标签输出（4 分类）", "phase": 1, "passes": false },
+  { "id": "F08", "feature": "Agent 交接：JSON 格式传递客户数据", "phase": 1, "passes": false },
+  { "id": "F09", "feature": "监控看板：接通率实时展示", "phase": 1, "passes": false },
+  { "id": "F10", "feature": "异议处理 Agent", "phase": 2, "passes": false },
+  { "id": "F11", "feature": "转化 Agent", "phase": 2, "passes": false },
+  { "id": "F12", "feature": "转人工 Agent", "phase": 3, "passes": false }
+]
+```
+
+**使用规则：**
+- 文件放在 `_harness/features.json`，在 CLAUDE.md 里注明路径
+- AI 每次 session 开始时读取此文件，找 `phase: 1` 且 `passes: false` 的最高优先级条目
+- 完成并自测通过后，才将对应条目改为 `"passes": true`
+- AI 不得删除、修改 `feature` 描述，不得新增条目（新增需人工审批后手动加入）
+- 人可以随时打开此文件检查真实进度，不依赖 AI 的口头汇报
